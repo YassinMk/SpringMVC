@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.util.Date;
 
-@Enabled
+@Entity
 @Data @AllArgsConstructor @NoArgsConstructor
 public class Patient {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
