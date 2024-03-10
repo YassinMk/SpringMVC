@@ -1,16 +1,14 @@
 package org.example.divintosrpingmvc.web;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
 import org.example.divintosrpingmvc.entities.Patient;
 import org.example.divintosrpingmvc.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,9 +53,19 @@ public class PatientController {
         return "formPatients";
     }
     @PostMapping("/save")
-    public String save(Model model, Patient patient) {
+    public String save(Model model, @Valid Patient patient, BindingResult bindingResult,@RequestParam(name = "page", defaultValue = "0") int page,
+                       @RequestParam(name = "keyword", defaultValue = "") String keyword){
+        if(bindingResult.hasErrors()) return "formPatients";
         patientRepository.save(patient);
-        return "formPatients";
+        return "redirect:/formPatients"+page+"?keyword="+keyword;
     }
+    @GetMapping(path = "/editPatient")
+    public String edit(Model model, @RequestParam("id") Long id){
+        Patient p = patientRepository.findById(id).orElse(null);
+        if(p == null) throw new RuntimeException("Patient introuvable");
+        model.addAttribute("patient", p);
+        return "editPatient";
+    }
+
 
 }

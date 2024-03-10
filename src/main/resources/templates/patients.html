@@ -19,13 +19,13 @@
                     </form>
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Nom</th>
-                            <th>Date</th>
-                            <th>Malade</th>
-                            <th>Score</th>
-                        </tr>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nom</th>
+                                <th>Date</th>
+                                <th>Malade</th>
+                                <th>Score</th>
+                            </tr>
                         </thead>
 
                         <tbody>
@@ -35,9 +35,11 @@
                             <td th:text="${patient.dateNaissance}"></td>
                             <td th:text="${patient.malade}"></td>
                             <td th:text="${patient.score}"></td>
-
                             <td>
                                 <a class="btn btn-danger" th:href="@{delete(id=${patient.id}, keyword=${keyword} ,page = ${currentPage})}">Delete</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" th:href="@{editPatient(id=${patient.id})}">Edit</a>
                             </td>
                         </tr>
                         </tbody>
