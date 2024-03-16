@@ -21,7 +21,8 @@ public class SecurityConfig {
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource){
         return new JdbcUserDetailsManager(dataSource);
     }
-    @Bean
+
+    /*@Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(){
         return new InMemoryUserDetailsManager(
             User.withUsername("yassine").password(passwordEncoder().encode("1234")).roles("USER").build(),
@@ -29,11 +30,13 @@ public class SecurityConfig {
                     User.withUsername("admin").password(passwordEncoder().encode("1234")).roles("USER","ADMIN").build()
         );
     }
+    */
 
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll();
