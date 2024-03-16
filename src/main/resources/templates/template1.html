@@ -9,7 +9,7 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/index}">Home</a>
+        <a class="navbar-brand" th:href="@{/user/index}">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,16 +22,24 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Patients</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/formPatients}">Nouveau</a></li>
-                        <li><a class="dropdown-item" th:href="@{/index}">Chercher</a></li>
+                        <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a class="dropdown-item" th:href="@{/admin/formPatients}">Nouveau</a></li>
+                        <li><a class="dropdown-item" th:href="@{/user/index}">Chercher</a></li>
                     </ul>
                 </li>
             </ul>
              <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown me-auto">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">[Username]</a>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" th:text="${#authentication.name}">
+                    </a>
+                    </a>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/formPatients}">Logout</a></li>
+                        <li>
+                            <form method="post" th:action="@{/logout}">
+                                <button class="dropdown-item" type="submit">Logout</button>
+                            </form>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Profil</a></li>
                     </ul>
                 </li>
             </ul>

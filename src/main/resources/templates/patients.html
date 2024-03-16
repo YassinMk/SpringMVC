@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header"><h3>List Patients</h3></div>
                 <div class="card-body">
-                    <form method="get" th:action = "@{index}">
+                    <form method="get" th:action = "@{/user/index}">
                         <input type="text" name="keyword" th:value="${keyword}" >
                         <button type="submit" class="btn btn-primary p-1" style="width: 100px">Search</button>
                     </form>
@@ -35,18 +35,18 @@
                             <td th:text="${patient.dateNaissance}"></td>
                             <td th:text="${patient.malade}"></td>
                             <td th:text="${patient.score}"></td>
-                            <td>
-                                <a class="btn btn-danger" th:href="@{delete(id=${patient.id}, keyword=${keyword} ,page = ${currentPage})}">Delete</a>
+                            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <a onclick="return confirm('Etes vous sure')" class="btn btn-danger" th:href="@{/admin/delete(id=${patient.id}, keyword=${keyword} ,page = ${currentPage})}">Delete</a>
                             </td>
-                            <td>
-                                <a class="btn btn-warning" th:href="@{editPatient(id=${patient.id})}">Edit</a>
+                            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <a class="btn btn-warning" th:href="@{/admin/editPatient(id=${patient.id})}">Edit</a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                     <ul class="nav nav-pills">
                         <li th:each="page,status:${pages}">
-                            <a onclick="return confirm('Etes Vous Sure ?')" th:class="${status.index == currentPage ? 'btn btn-primary ms-2 ' : 'btn btn-outline-info ms-2'}" th:text="${status.index}" th:href="@{index(page=${status.index}, keyword=${keyword})}"></a>
+                            <a onclick="return confirm('Etes Vous Sure ?')" th:class="${status.index == currentPage ? 'btn btn-primary ms-2 ' : 'btn btn-outline-info ms-2'}" th:text="${status.index}" th:href="@{/user/index(page=${status.index}, keyword=${keyword})}"></a>
                             </a>
                         </li>
                     </ul>
