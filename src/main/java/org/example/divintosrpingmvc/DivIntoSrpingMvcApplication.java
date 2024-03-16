@@ -24,9 +24,5 @@ public class DivIntoSrpingMvcApplication {
 
         };
     }
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
 }
