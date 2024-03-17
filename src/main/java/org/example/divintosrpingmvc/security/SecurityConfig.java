@@ -1,11 +1,14 @@
 package org.example.divintosrpingmvc.security;
 
 
+import lombok.AllArgsConstructor;
+import org.example.divintosrpingmvc.security.service.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -16,8 +19,10 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
-    @Bean
+    private UserDetailServiceImpl userDetailsServiceImpl;
+    //@Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource){
         return new JdbcUserDetailsManager(dataSource);
     }
@@ -39,13 +44,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll();
-        httpSecurity.rememberMe();
-        httpSecurity.authorizeHttpRequests().requestMatchers("/webjars/**").permitAll();
-        httpSecurity.authorizeHttpRequests().requestMatchers("/user/**").hasRole("USER");
-        httpSecurity.authorizeHttpRequests().requestMatchers("/admin/**").hasRole("ADMIN");
-        httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
-        httpSecurity.exceptionHandling().accessDeniedPage("/notAuthorized");
+        httpSecurity.formLogin(form->form.loginPage("/login").permitAll())
+                .authorizeHttpRequests(authrize->{
+                  authrize.requestMatchers("/webjars/**").permitAll();
+                  authrize.requestMatchers("/user/**").hasAnyAuthority("USER");
+                  authrize.requestMatchers("/admin/**").hasAnyAuthority("ADMIN");
+                  authrize.anyRequest().authenticated();
+                })
+                .exceptionHandling(exceptionHandlingConfigurer -> {
+                    exceptionHandlingConfigurer.accessDeniedPage("/notAuthorized");
+                })
+                .userDetailsService(userDetailsServiceImpl)
+                .rememberMe(rememberMe->rememberMe.key("rememberme").tokenValiditySeconds(120));
+
         return httpSecurity.build();
     }
 
