@@ -8,7 +8,7 @@
         <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.example</groupId>
+    <groupId>org.yassinMk</groupId>
     <artifactId>divInto-SrpingMVC</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>divInto-SrpingMVC</name>
